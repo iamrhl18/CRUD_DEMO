@@ -1,10 +1,25 @@
 package com.rahul.CrudSpringBootDemo.dto;
 
+import jakarta.validation.constraints.*;
+
 public class CreateStudentRequestDTO {
+
+    @NotBlank(message = "Name cann't be empty or null ")
+    @Size(min = 2,max = 50,message = "Student name must be within 2 to 50 character long")
     private String name;
-    private int age;
+
+    @Min(value = 18 ,message = "Age must be grater than 18")
+    @NotNull(message = "Age is required")
+    private Integer age;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be in proper formate")
     private String email;
-    private int rollNo;
+
+    @NotNull(message = "Roll number is required")
+    private Integer rollNo;
+
+    @NotBlank(message = "Subject is required")
     private String subject;
 
     public String getName() {
