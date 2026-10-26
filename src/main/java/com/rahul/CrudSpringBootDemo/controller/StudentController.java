@@ -28,7 +28,7 @@ public class StudentController {
 
     //create student -- > POST (/app/students)
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<CreateStudentResponseDTO> createStudent(@Valid @RequestBody CreateStudentRequestDTO createStudentRequestDTO){
 
         CreateStudentResponseDTO createdStudent = studentservice.createStudent(createStudentRequestDTO);
@@ -40,13 +40,9 @@ public class StudentController {
     }
     // read one  student --> GET --> /api/students/create/{id}
 
-    @GetMapping("/get")
-    public ResponseEntity<CreateStudentResponseDTO> getStudent(@RequestParam Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<CreateStudentResponseDTO> getStudent(@PathVariable Long id){
         CreateStudentResponseDTO Studentresp = studentservice.getStudent(id);
-
-        if(Studentresp == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Studentresp);
@@ -56,26 +52,19 @@ public class StudentController {
 
     // Read all student --> GET --> /api/students
 
-    @GetMapping("/getAll")
+    @GetMapping
     public ResponseEntity<List<CreateStudentResponseDTO>> getAllStudent(){
         List<CreateStudentResponseDTO> studentList = studentservice.getAllStudent();
-        if(studentList.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(studentList);
 
     }
 
     //update student -->  PUT --> /api/students/{id}
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<UpdateStudentResponseDTO> updateStudent(@RequestParam Long id
     , @RequestBody UpdateStudentRequestDTO studentReq){
         UpdateStudentResponseDTO Studentresp = studentservice.updateStudent(id,studentReq);
-
-        if(Studentresp == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Studentresp);
@@ -83,22 +72,17 @@ public class StudentController {
 
     // delete student --> DELETE --> /api/students/{id}
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<String> deleteStudent(@RequestParam Long id){
-        Boolean isDeleted = studentservice.deleteStudent(id);
-        if(isDeleted ==false){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok("Record Deleted");
+        studentservice.deleteStudent(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @PatchMapping("/delete-soft")
     public ResponseEntity<String> deleteStudentSoftly(@RequestParam Long id){
-        Boolean isDeleted = studentservice.deleteStudentSoftly(id);
-
-        if(!isDeleted){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok("Record Deleted sucessfully");
+         studentservice.deleteStudentSoftly(id);
+        return ResponseEntity.noContent().build();
     }
 }
